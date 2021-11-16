@@ -9,7 +9,7 @@ resources:
   type: fly
   source:
     password: {{test-password}}
-    username: {{test-password}}
+    username: {{test-username}}
     skip_cert_check: true
 
 jobs:
