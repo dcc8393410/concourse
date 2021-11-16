@@ -6,7 +6,7 @@ image_resource:
     repository: heroku/nodejs-hello-world
     tag: "latest"
 inputs:
-- name: concourse-test
+- name: concourse-test-git
 
 run:
   path: deploy.sh
