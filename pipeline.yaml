@@ -19,7 +19,7 @@ jobs:
   - get: concourse-test-git
     trigger: true
   - task: pipeline-create
-    file: tasks/deploy.yaml
+    file: deploy.yaml
 - name: pipeline-create-two
   public: true
   plan:
@@ -28,8 +28,8 @@ jobs:
     passed:
       - pipeline-create-one
   - task: curl-api
-    file: tasks/curl.yml
-  - put: cloudfoundry
-    params:
-      manifest: source-code/manifest/concourse-demo-web-manifest.yml
-      path: target-web/concourse-demo-web.jar
+    file: curl.yml
+  #- put: cloudfoundry
+  #  params:
+  #    manifest: source-code/manifest/concourse-demo-web-manifest.yml
+  #    path: target-web/concourse-demo-web.jar
