@@ -5,21 +5,31 @@ resources:
   icon: github
   source:
     uri: https://github.com/dcc8393410/concourse
+- name: curl-data
+  type: fly
+  source:
+    password: {{test-password}}
+    username: {{test-password}}
+    skip_cert_check: true
 
 jobs:
-- name: job
+- name: pipeline-create-one
   public: true
   plan:
-  - get: concourse-docs-git
+  - get: concourse-test-git
     trigger: true
-  - task: list-files
-    config:
-      inputs:
-        - name: concourse-docs-git
-      platform: linux
-      image_resource:
-        type: registry-image
-        source: { repository: busybox }
-      run:
-        path: ls
-        args: ["-la", "./concourse-docs-git"]
+  - task: pipeline-create
+    file: tasks/deploy.yaml
+- name: pipeline-create-two
+  public: true
+  plan:
+  - get: concourse-test-git
+    trigger: true
+    passed:
+      - pipeline-create-one
+  - task: curl-api
+    file: tasks/curl.yml
+  - put: cloudfoundry
+    params:
+      manifest: source-code/manifest/concourse-demo-web-manifest.yml
+      path: target-web/concourse-demo-web.jar
